@@ -1,14 +1,10 @@
 #include <iostream>
-#include <purchase/ProductItem.hpp>
-#include <purchase/ProductInfo.hpp>
+// #include <purchase/ProductItem.hpp>
+// #include <purchase/ProductInfo.hpp>
+#include <purchase/InfoMap.hpp>
 
-int main() {
-    purchase::ProductItem productItem;
-    std::cin >> productItem;
-    std::cout << productItem << std::endl;
-
-    purchase::ProductInfo productInfo;
-    std::cin >> productInfo;
-    std::cout << productInfo << std::endl;
+int main()
+{
+    purchase::InfoMap map;
     return 0;
 }

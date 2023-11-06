@@ -5,9 +5,9 @@
 #include <unordered_map>
 #include <vector>
 
-namespace purchase {
+#include <purchase/ProductItem.hpp>
 
-class ProductItem;
+namespace purchase {
 
 class InfoMap {
 public:
