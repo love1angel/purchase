@@ -1,7 +1,5 @@
 #pragma once
 
-#include <purchase/common.hpp>
-
 #include <iostream>
 #include <string>
 
@@ -16,22 +14,24 @@ class ProductInfo {
     friend std::istream& operator>>(std::istream&, ProductInfo&);
     friend std::ostream& operator<<(std::ostream&, const ProductInfo&);
 
+public:
+    [[nodiscard]] const std::string& getName() const { return m_name; }
+    [[nodiscard]] const std::string& getProducer() const { return m_producer; }
+
 private:
-    pid m_pid {};
     std::string m_name;
     std::string m_producer;
 };
 
-std::istream& operator>>(std::istream& in, ProductInfo& p)
+inline std::istream& operator>>(std::istream& in, ProductInfo& p)
 {
-    return in >> p.m_pid >> p.m_name >> p.m_producer;
+    return in >> p.m_name >> p.m_producer;
 }
 
-std::ostream&
+inline std::ostream&
 operator<<(std::ostream& o, const ProductInfo& p)
 {
-    return o << "ProductInfo: { id: " << p.m_pid
-             << ", name: " << p.m_name
+    return o << "ProductInfo: { name: " << p.m_name
              << ", producer: " << p.m_producer
              << " }." << std::endl;
 }

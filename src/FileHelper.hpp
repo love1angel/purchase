@@ -28,7 +28,7 @@ public:
     }
 
 private:
-    std::ifstream m_file {};
+    std::fstream m_file {};
 };
 
 } // namespace purchase

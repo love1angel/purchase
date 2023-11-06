@@ -3,7 +3,7 @@
 namespace purchase {
 
 FileHelper::FileHelper(std::string_view path)
-    : m_file(path.data(), std::ios::binary)
+    : m_file(path.data(), std::ios::in | std::ios::out)
 {
     if (!m_file.is_open()) {
         // Handle error opening file

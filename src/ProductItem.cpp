@@ -10,42 +10,53 @@ std::istream& operator>>(std::istream& in, ProductItem& p)
     std::string purchase_time;
     std::string expire_time;
 
-    // read time and other thing
     {
-        std::string purchase_time_1;
-        std::string expire_time_1;
-        in >> p.m_pid >> p.m_price >> p.m_amount >> purchase_time >> purchase_time_1 >> expire_time >> expire_time_1;
-        purchase_time += " ";
-        purchase_time += purchase_time_1;
-        expire_time += " ";
-        expire_time += expire_time_1;
+        std::string t1, t2, t3, t4;
+        
+        if (not (in >> p.m_pid >> p.m_price >> p.m_amount >> t1 >> t2 >> t3 >> t4)) {
+            return in;
+        }
+        purchase_time += t1 += " ";
+        purchase_time += t2;
+        expire_time += t3 += " ";
+        expire_time += t4;
     }
 
-    auto str2time = [](const std::string& time) {
-        std::tm buffer {};
-        std::istringstream iss(time);
-        iss >> std::get_time(&buffer, "%Y-%m-%d %H:%M:%S");
-        return std::chrono::system_clock::from_time_t(std::mktime(&buffer));
-    };
+    {
+        std::tm parsedTime = {};
+        std::istringstream timeStream(purchase_time);
+        timeStream >> std::get_time(&parsedTime, "%Y-%m-%d %H:%M:%S");
+        std::time_t parsedTime_t = std::mktime(&parsedTime);
+        auto parsedTimePoint = std::chrono::system_clock::from_time_t(parsedTime_t);
+        p.m_purchase_time = parsedTimePoint;
+        // std::chrono::year_month_day ymd2 = std::chrono::floor<std::chrono::days>(parsedTimePoint);
+        // std::cout << "xp" << ymd2.year() << std::endl;
+        // std::cout << ymd2.month() << std::endl;
+        // std::cout << ymd2.day() << std::endl;
+    }
 
-    if (in) {
-        p.m_purchase_time = str2time(purchase_time);
-        p.m_expire_time = str2time(expire_time);
-    } else {
-        p = ProductItem();
+    {
+        std::tm parsedTime = {};
+        std::istringstream timeStream(expire_time);
+        timeStream >> std::get_time(&parsedTime, "%Y-%m-%d %H:%M:%S");
+        std::time_t parsedTime_t = std::mktime(&parsedTime);
+        auto parsedTimePoint = std::chrono::system_clock::from_time_t(parsedTime_t);
+        p.m_expire_time = parsedTimePoint;
+        // std::chrono::year_month_day ymd2 = std::chrono::floor<std::chrono::days>(parsedTimePoint);
+        // std::cout << "xp" << ymd2.year() << std::endl;
+        // std::cout << ymd2.month() << std::endl;
+        // std::cout << ymd2.day() << std::endl;
     }
     return in;
 }
 
 std::ostream& operator<<(std::ostream& o, const ProductItem& p)
 {
-    std::time_t purchase_time = std::chrono::system_clock::to_time_t(p.m_purchase_time);
-    std::time_t expire_time = std::chrono::system_clock::to_time_t(p.m_expire_time);
     return o << "ProductItem: { id: " << p.m_pid
              << ", price: " << p.m_price
              << ", amount: " << p.m_amount
-             << ", purchase time: " << std::ctime(&purchase_time)
-             << ", expire time: " << std::ctime(&expire_time)
+             << ", purchase time: " << p.m_purchase_time
+             << ", expire time: " << p.m_expire_time
              << " }." << std::endl;
 }
 

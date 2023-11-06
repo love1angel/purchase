@@ -2,9 +2,11 @@
 
 #include <purchase/common.hpp>
 
+#include <fstream>
 #include <unordered_map>
 #include <vector>
 
+#include <purchase/ProductInfo.hpp>
 #include <purchase/ProductItem.hpp>
 
 namespace purchase {
@@ -20,7 +22,8 @@ public:
     void shipment(pid id, int amount);
 
 private:
-    std::unordered_map<pid, std::vector<ProductItem>> m_map {};
+    std::vector<ProductItem> m_total {};
+    std::unordered_map<pid, ProductInfo> m_product_map {};
 };
 
 } // namespace purchase

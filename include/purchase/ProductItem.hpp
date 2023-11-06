@@ -26,6 +26,28 @@ public:
     {
     }
 
+    [[nodiscard]] pid getPid() const { return m_pid; }
+    [[nodiscard]] double getPrice() const { return m_price; }
+    [[nodiscard]] int getAmount() const { return m_amount; }
+    [[nodiscard]] const auto& getPurchaseTime() const { return m_purchase_time; }
+    [[nodiscard]] const auto& getExpireTime() const { return m_expire_time; }
+
+    bool isOutdated() const
+    {
+        using namespace std::chrono;
+        const auto today = sys_days { std::chrono::floor<days>(system_clock::now()) };
+        return m_expire_time <= today;
+    }
+
+    bool isWarn(int amount) const
+    {
+        using namespace std::chrono;
+        const auto today = sys_days { std::chrono::floor<days>(system_clock::now()) };
+
+        const auto delta = (today - m_expire_time).count();
+        return delta > 0 && delta <= amount;
+    }
+
 private:
     pid m_pid {};
 
